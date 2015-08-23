@@ -1,6 +1,8 @@
 import codeanticode.syphon.*;
 
 PGraphics canvas;
+PImage img;
+
 SyphonClient client;
 
 import processing.serial.*;
@@ -16,7 +18,7 @@ int LineCount = 0;
 
 void setup() 
 {
-  size(200,200); //make our canvas 200 x 200 pixels big
+  size(200,200, P3D); //make our canvas 200 x 200 pixels big
   
   printArray(Serial.list());
   
@@ -27,7 +29,7 @@ void setup()
     
   // Create syhpon client to receive frames 
   // from the first available running server: 
-  client = new SyphonClient(this);
+  client = new SyphonClient(this, "Arena", "Composition");
   
   background(0);
 }
@@ -62,8 +64,10 @@ void draw() {
   if ( LineCount == 0 ) {
     if ( projecting ) {
       if ( client.available() ) {
-        canvas = client.getGraphics(canvas);
-        image(canvas, 0, 0, width, height); 
+        // canvas = client.getGraphics(canvas);
+        img = client.getImage(img);
+
+        image(img, 0, 0, 8, 8); 
         for ( int y = 0; y < 8; y++ ) {
            myPort.write( 'X' );
            myPort.write( y + '0' );
